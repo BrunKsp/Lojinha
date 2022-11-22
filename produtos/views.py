@@ -3,15 +3,20 @@ from .models import Produto
 from django.http import HttpResponse
 from .forms import ProdutoForm
 from django.contrib import messages
+from django.core.paginator import Paginator
 
-def ListProduto (request):
-    produto = Produto.objects.all()
-    return render(request,'produto/ListaProd.html',{'produto':produto})
+def ListaProd (request):
+    
+    produtos = Produto.objects.all()
+    paginator = Paginator(produtos,10)
+    page = request.GET.get('page')
+    produtos = paginator.get_page(page)
+    return render(request,'produto/ListaProd.html',{'produto':produtos})
 
 
 def ProdutoView (request ,id):
-    produto = get_object_or_404(Produto ,pk = id)
-    return render(request,'produto/produto.html',{'produto':produto})
+    produtos = get_object_or_404(Produto ,pk = id)
+    return render(request,'produto/produto.html',{'produto':produtos})
 
 
 
@@ -21,8 +26,8 @@ def newProduto (request):
         form = ProdutoForm(request.POST)
 
         if form.is_valid():
-            produto = form.save(commit=False)
-            produto.save()
+            produtos = form.save(commit=False)
+            produtos.save()
             return redirect('/')
 
 
@@ -32,26 +37,26 @@ def newProduto (request):
 
 
 def EditProduto (request,id):
-    produto = get_object_or_404(Produto ,pk = id)
-    form = ProdutoForm(instance= produto)
+    produtos = get_object_or_404(Produto ,pk = id)
+    form = ProdutoForm(instance= produtos)
 
 
     if request.method == 'POST':
-        form = ProdutoForm(request.POST,instance=produto)
+        form = ProdutoForm(request.POST,instance=produtos)
         if (form.is_valid()):
-            produto.save()
+            produtos.save()
             return redirect('/')
         else :
-            return render(request,'produto/editproduto.html',{'form':form, 'produto':produto})
+            return render(request,'produto/editproduto.html',{'form':form, 'produto':produtos})
 
 
     else:
-        return render(request,'produto/editproduto.html',{'form':form, 'produto':produto})
+        return render(request,'produto/editproduto.html',{'form':form, 'produto':produtos})
 
 
 def DeleteProduto (request ,id):
-    produto = get_object_or_404(Produto ,pk = id)
-    produto.delete()
+    produtos = get_object_or_404(Produto ,pk = id)
+    produtos.delete()
 
     messages.info(request,'Tarefa Delatada com Sucesso')
     return redirect('/')
