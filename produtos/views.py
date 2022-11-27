@@ -1,25 +1,29 @@
 from django.shortcuts import render,get_object_or_404 , redirect
+from django.contrib.auth.decorators import login_required
 from .models import Produto
-from django.http import HttpResponse
 from .forms import ProdutoForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 
-def ListaProd (request):
+
+def listaProd (request):
     
-    produtos = Produto.objects.all()
-    paginator = Paginator(produtos,10)
-    page = request.GET.get('page')
-    produtos = paginator.get_page(page)
-    return render(request,'produto/ListaProd.html',{'produto':produtos})
+    search = request.GET.get('search')
+
+    if search :
+        produtos = Produto.objects.filter(name_icontains=search)
+    else :
+        produtos = Produto.objects.all()
+        return render(request,'produto/ListaProd.html',{'produto':produtos})
 
 
-def ProdutoView (request ,id):
-    produtos = get_object_or_404(Produto ,pk = id)
-    return render(request,'produto/produto.html',{'produto':produtos})
+def produtoView (request ,id):
+    produto = get_object_or_404(Produto ,pk=id)
+    return render(request,'produto/produto.html',{'produto':produto})
 
 
 
+@login_required
 def newProduto (request):
 
     if request.method == 'POST':
@@ -35,8 +39,8 @@ def newProduto (request):
         form = ProdutoForm()
         return render(request,'produto/addproduto.html',{'form':form})
 
-
-def EditProduto (request,id):
+@login_required
+def editProduto (request,id):
     produtos = get_object_or_404(Produto ,pk = id)
     form = ProdutoForm(instance= produtos)
 
@@ -53,12 +57,17 @@ def EditProduto (request,id):
     else:
         return render(request,'produto/editproduto.html',{'form':form, 'produto':produtos})
 
-
-def DeleteProduto (request ,id):
+@login_required
+def deleteProduto (request ,id):
     produtos = get_object_or_404(Produto ,pk = id)
     produtos.delete()
 
-    messages.info(request,'Tarefa Delatada com Sucesso')
+    messages.info(request,'Tarefa Deletada com Sucesso')
     return redirect('/')
 
-    
+
+def sobreNos (request) :
+
+    if request.method == 'GET':
+        return render(request,'sobrenos.html')
+ 

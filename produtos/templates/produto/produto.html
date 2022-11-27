@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}'{{produto.nome}}'{% endblock %}
 
 {% block content %}
-<div class="offset-1 col-10 list-div">
-    <h1>{{prduto.nome}}</h1>
-    <p>{{produto.descricao}}</p>
-    <h2>{{produto.quantidade}}</h2>
+<div class="item view">
+    
+    <div class ="produto-name">
+        <h1>{{produto.nome}}</h1>
+    </div>
+    
+    <div class = "produto-descricao">
+        <p>{{produto.descricao}}</p>
+    </div>
+    
+    <div class = "produto- quantidade ">
+        <h2>{{produto.quantidade}}</h2>
+    </div>
+    
 </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-
-{% block title %}Lista de Produtos{% endblock %}
+{% load static %}
+{% block title %}Lojinha{% endblock %}
 
 {% block content %}
 <div class="offset-1 col-10 list-div">
@@ -34,22 +34,6 @@
             </li>
         {% endfor %}
     </div>
-    <div class="pagination">
-        <span class="step-links">
-            {% if prdotuoss.has_previous %}
-                <a href="?page={{ produtos.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
-            {% endif %}
-            
-            {% if produtos.paginator.num_pages %}
-            <span class="current">
-                {{ produtos.number }} de {{ produtos.paginator.num_pages }}
-            </span>
-            {% endif %}
-        
-            {% if produtos.has_next %}
-                <a href="?page={{ produtos.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
-            {% endif %}
-        </span>
-    </div>
+    
 </div>
 {% endblock %}

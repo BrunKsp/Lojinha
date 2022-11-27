@@ -6,6 +6,8 @@ class Produto(models.Model):
     descricao= models.TextField()
     quantidade = models.IntegerField()
 
+  
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now = True)
 
